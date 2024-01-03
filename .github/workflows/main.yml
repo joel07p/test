@@ -43,8 +43,8 @@ jobs:
     needs: deploy
     runs-on: ubuntu-latest
     steps:
-    - uses: appleboy/ssh-action@master
     - name: connect to server and restart webservices | pm2 | nginx
+    - uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
