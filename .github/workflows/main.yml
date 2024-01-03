@@ -53,9 +53,11 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
         script: |
+          service nginx stop
           cd /root/test/
           pm2 kill
           npm i --save-dev webpack-node-externals run-script-webpack-plugin webpack
           pm2 start --name backend/nest npm -- run start:dev
           cd /root/nuxt-test/
           pm2 start ecosystem.config.cjs
+          service nginx start
