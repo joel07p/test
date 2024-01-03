@@ -1,3 +1,5 @@
+name: Automatic Deployment
+
 on:
   push:
     branches:
@@ -51,8 +53,10 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
         script: |
+          service nginx stop
           cd /root/test/
           pm2 kill all
           pm2 start --name backend/nest dist/main.js
           cd /root/nuxt-test/
           pm2 start ecosystem.config.cjs
+          service nginx start
