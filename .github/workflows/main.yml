@@ -28,7 +28,7 @@ jobs:
     
     steps:
     - name: copy file via ssh key
-      uses: appleboy/ssh-action@master
+      uses: appleboy/scp-action@master
       with:
         host: 193.135.10.73
         username: root
