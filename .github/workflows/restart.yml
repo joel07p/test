@@ -13,7 +13,7 @@ jobs:
   use-build:
     # adapt to point to the current repo
     # https://docs.github.com/en/actions/learn-github-actions/reusing-workflows#calling-a-reusable-workflow
-    uses: joel07p/test/.github/workflows/deploy.yml@main
+    uses: joel07p/test/.github/workflows/build.yml@main
     # that's all - jobs that call a reusable workflow can do nothing else
   restart:
     needs: use-build
