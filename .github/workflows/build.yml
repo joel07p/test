@@ -27,11 +27,11 @@ jobs:
       # https://github.com/actions/setup-node
       - name: Set up node env
         # 2.5.1 was the latest at the time of writing
-        uses: actions/setup-node@latest
+        uses: actions/setup-node@2.5.1
         with:
           # specify the version appropriate to your project
           # setup-node can also read the version from a Node version file. see the setup-node docs for details
-          node-version: 16.3.2
+          node-version: 18
           # cache installed dependencies for best performance. yarn and pnpm are also supported  
           cache: npm
 
