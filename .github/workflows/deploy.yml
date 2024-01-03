@@ -49,3 +49,19 @@ jobs:
           remote_port: 22
           remote_user: ${{ secrets.SSH_USERNAME }}
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          
+      - uses: appleboy/ssh-action@master
+        name: connect to server and restart webservices | pm2 | nginx
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            service nginx stop
+            cd /root/test/
+            pm2 kill
+            pm2 start --name backend/nest npm -- run start:dev
+            cd /root/nuxt-test/
+            pm2 start ecosystem.config.cjs
+            service nginx start
