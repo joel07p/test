@@ -61,7 +61,7 @@ jobs:
             service nginx stop
             cd /root/test/
             pm2 kill
-            pm2 start --name backend/nest npm -- dist/main.js
+            pm2 start --name backend/nest dist/main.js
             cd /root/nuxt-test/
             pm2 start ecosystem.config.cjs
             service nginx start
