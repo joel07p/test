@@ -34,5 +34,5 @@ jobs:
         username: root
         port: 22
         key: ${{ secrets.SSH_CONNECTION }}
-        source: "./dist/*"
+        source: "dist/*"
         target: "/root/test/"
