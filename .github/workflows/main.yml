@@ -33,8 +33,8 @@ jobs:
       uses: burnett01/rsync-deployments@6.0.0
       with:
         switches: -avzr --delete
-        path: dist/
-        remote_path: /root/test/dist
+        path: /
+        remote_path: /root/test/
         remote_host: ${{ secrets.SSH_HOST }}
         remote_port: 22
         remote_user: ${{ secrets.SSH_USERNAME }}
