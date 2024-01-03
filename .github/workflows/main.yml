@@ -55,6 +55,7 @@ jobs:
         script: |
           cd /root/test/
           pm2 kill all
+          npm i --save-dev webpack-node-externals run-script-webpack-plugin webpack
           pm2 start --name backend/nest npm -- run start:dev
           cd /root/nuxt-test/
           pm2 start ecosystem.config.cjs
