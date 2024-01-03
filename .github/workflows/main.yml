@@ -37,3 +37,22 @@ jobs:
         remote_port: 22
         remote_user: ${{ secrets.SSH_USERNAME }}
         remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+  restart:
+    name: restart webservices
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+    - uses: appleboy/ssh-action@master
+    - name: connect to server and restart webservices | pm2 | nginx
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        script: |
+          cd /root/test/
+          pm2 kill all
+          pm2 start --name backend/nest dist/main.js
+          cd /root/nuxt-test/
+          pm2 start ecosystem.config.cjs
