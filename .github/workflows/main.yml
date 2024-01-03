@@ -30,9 +30,9 @@ jobs:
     - name: copy file via ssh key
       uses: appleboy/scp-action@v0.1.7
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        port: ${{ secrets.PORT }}
+        host: 193.135.10.73
+        username: root
+        port: 22
         key: ${{ secrets.SSH_CONNECTION }}
         source: "dist/"
-        target: /root/test
+        target: /root/test/
