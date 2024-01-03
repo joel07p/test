@@ -4,7 +4,7 @@ on:
       - main
 jobs:
   BUILD:
-    name: build repo
+    name: Build repo
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
