@@ -1,4 +1,4 @@
-name: Automatic Deployment
+name: Automatic Build
 
 on:
   push:
@@ -27,41 +27,4 @@ jobs:
       run: |
         npm install
         npm run build
-        mkdir build
-        mv dist/ build/
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: rsync deployments
-      uses: burnett01/rsync-deployments@6.0.0
-      with:
-        switches: -avzr --delete
-        path: build/
-        remote_path: /root/test/dist
-        remote_host: ${{ secrets.SSH_HOST }}
-        remote_port: 22
-        remote_user: ${{ secrets.SSH_USERNAME }}
-        remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-  restart:
-    name: restart webservices
-    needs: deploy
-    runs-on: ubuntu-latest
-    steps:
-    - uses: appleboy/ssh-action@master
-      name: connect to server and restart webservices | pm2 | nginx
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: 22
-        script: |
-          service nginx stop
-          cd /root/test/
-          pm2 kill
-          pm2 start --name backend/nest dist/main.js
-          cd /root/nuxt-test/
-          pm2 start ecosystem.config.cjs
-          service nginx start
+        git push build
