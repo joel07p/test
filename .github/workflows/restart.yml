@@ -1,0 +1,37 @@
+name: Restart Webserverservices
+
+on:
+  # support calling this workflow from other workflows
+  # https://docs.github.com/en/actions/learn-github-actions/reusing-workflows#creating-a-reusable-workflow
+  workflow_call:
+  # support running this workflow on push events
+  # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#onpushpull_requestbranchestags
+  push:
+    branches-ignore: main
+
+jobs:
+  use-build:
+    # adapt to point to the current repo
+    # https://docs.github.com/en/actions/learn-github-actions/reusing-workflows#calling-a-reusable-workflow
+    uses: joel07p/test/.github/workflows/deploy.yml@main
+    # that's all - jobs that call a reusable workflow can do nothing else
+  restart:
+    needs: use-build
+    name: restart webservices
+    runs-on: ubuntu-latest
+    steps:
+    - uses: appleboy/ssh-action@master
+    - name: connect to server and restart webservices | pm2 | nginx
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        script: |
+          service nginx stop
+          cd /root/test/
+          pm2 kill
+          pm2 start --name backend/nest npm -- run start:dev
+          cd /root/nuxt-test/
+          pm2 start ecosystem.config.cjs
+          service nginx start
