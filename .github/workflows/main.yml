@@ -17,19 +17,18 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node_version }}
+
     - name: npm install, build and test
       run: |
         npm install
         npm run build --if-present
-
-  upload:
-    name: upload files to server
+  deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: connect via ssh and execute rsync
-    - uses: burnett01/rsync-deployments@6.0.0
+    - name: rsync deployments
+      uses: burnett01/rsync-deployments@6.0.0
       with:
         switches: -avzr --delete
         path: dist/
@@ -38,23 +37,3 @@ jobs:
         remote_port: 22
         remote_user: ${{ secrets.SSH_USERNAME }}
         remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
-      
-  restart:
-    name: restart webservices
-    needs: upload
-    runs-on: ubuntu-latest
-    steps:
-    - uses: appleboy/ssh-action@master
-    - name: connect to server and restart webservices | pm2 | nginx
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: 22
-        script: |
-          cd /root/test/
-          pm2 kill all
-          pm2 start --name backend/nest dist/main.js
-          cd /root/nuxt-test/
-          pm2 start ecosystem.config.cjs
-          
