@@ -27,7 +27,7 @@ jobs:
       # https://github.com/actions/setup-node
       - name: Set up node env
         # 2.5.1 was the latest at the time of writing
-        uses: actions/setup-node@2.5.1
+        uses: actions/setup-node@v2.5.1
         with:
           # specify the version appropriate to your project
           # setup-node can also read the version from a Node version file. see the setup-node docs for details
